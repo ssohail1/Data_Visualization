@@ -4,6 +4,13 @@
 
 ### Libraries
 
-*Python*
+#### Python
+- *numpy*
+- *pandas*
+- *matplotlib*
+- *seaborn* 
+- *scikit-learn*
 
-*R*
+#### R
+- *ggplot2*
+- *plotly*
