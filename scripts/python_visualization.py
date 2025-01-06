@@ -19,5 +19,8 @@ plot_df = pd.DataFrame(data = principalComponents, columns = ['dim1', 'dim2'], i
 # We can then plot this like so:
 sns.scatterplot(x = 'dim1', y = 'dim2', data = plot_df)
 
-plot_df = pd.concat([plot_df, sample_table['env_feature']], axis = 1)
+# plot_df = pd.concat([plot_df, sample_table['env_feature']], axis = 1)
+
+# color the dots by a variable from the sample_table
+plot_df['envfeature'] = list(sample_table['histology_cat']) # make sure the sample names match
 sns.scatterplot(x = 'dim1', y = 'dim2', hue = 'env_feature', data = plot_df)
