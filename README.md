@@ -14,3 +14,5 @@
 #### R
 - *ggplot2*
 - *plotly*
+- *vegan*
+- *dplyr*
