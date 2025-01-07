@@ -10,7 +10,10 @@ output:
     code_folding: hide
 ---
 
+# Interactive 3-D scatter plot with p-value statistic
+
 ```{r, include=FALSE, warning=FALSE}
+
 # load libraries
 library(BiocManager)
 library(phyloseq)
@@ -76,4 +79,5 @@ euclidpcoafig
 pdffile <- paste0("Euclidean_pcoa",".html")
 htmlwidgets::saveWidget((euclidpcoafig),
                         file = pdffile, selfcontained = FALSE)
+```
 
