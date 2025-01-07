@@ -10,8 +10,8 @@ output:
     code_folding: hide
 ---
 
-# Load libraries
 ```{r, include=FALSE, warning=FALSE}
+# load libraries
 library(BiocManager)
 library(phyloseq)
 library(stringr)
@@ -31,3 +31,33 @@ library(ggord)
 library(FactoMineR)
 library(factoextra)
 library(PERMANOVA)
+
+# load contaminants, count table(with experimental samples), variant table, metadata table, and count table with all samples included(control + experimental samples)
+source("~/Downloads/WolfeLab/Urobiome.colors.R")
+contaminants <- read.table("Contaminants.tsv",sep = '\t',header = TRUE) # list of contaminants
+counttbl <- read.table("count_table.tsv", sep = '\t',header=T) # samples are rows
+varianttbl <- read.table("variant_table.tsv", sep = '\t',header=T) # variants are rows
+sampletbl <- read.table("metadata.txt",sep = '\t', header=T, row.names=1)
+allsamples_counttbl <- read.table("allsamples_count_table.tsv", sep = '\t',header=T) # samples are rows
+
+# remove contaminants
+allsamples_counttblnew <- allsamples_counttbl[!rownames(allsamples_counttbl) %in% contaminants$contam,]
+counttblnew <- counttbl[!rownames(counttbl) %in% contaminants$contam,]
+varianttblnew <- varianttbl[!(rownames(varianttbl) %in% contaminants$contam),]
+
+# create a phyloseq object
+counttblt <- data.frame(t(counttblnew))
+allsamples_counttblt <- data.frame(t(allsamples_counttblnew))
+ps_obj <- phyloseq(otu_table(counttblt, taxa_are_rows=FALSE),
+                   sample_data(sampletbl),
+                   tax_table(as.matrix(varianttblnew)))
+
+
+# extract paired data
+ps.prop <- transform_sample_counts(ps_obj, function(otu) otu/sum(otu))
+counttab <- as.matrix(ps_obj@otu_table) # signif
+sampletblnew <- data.frame(sampletbl)
+sampletblnew <- sampletbl[(sampletbl$type == "paired"),]
+sampleskeep <- (rownames(sampletbl[(sampletbl$type == "paired"),]))
+counttabnew <- counttab[(rownames(counttab) %in% sampleskeep),]
+
