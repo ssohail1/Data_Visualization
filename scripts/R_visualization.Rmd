@@ -1,0 +1,33 @@
+---
+title: "R_visualization"
+date: "2024-12-17"
+author: "Sidra Sohail"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    df_print: paged
+    code_folding: hide
+---
+
+# Load libraries
+```{r, include=FALSE, warning=FALSE}
+library(BiocManager)
+library(phyloseq)
+library(stringr)
+library(vegan)
+library(ape)
+library(ggforce)
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+library(pheatmap)
+library(ggpubr)
+library(microbiome)
+library(cowplot)
+library(devtools)
+library(plotly)
+library(ggord)
+library(FactoMineR)
+library(factoextra)
+library(PERMANOVA)
