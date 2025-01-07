@@ -1,5 +1,4 @@
-# Data_Visualization
-### By: Sidra Sohail
+# Data_Visualization  |  By: ssohail1
 
 ## Visualize count data in R and Python
 Visualize data with absolute counts in two-dimensional and three-dimensional space
