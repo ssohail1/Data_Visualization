@@ -15,8 +15,6 @@ output:
 ```{r, include=FALSE, warning=FALSE}
 
 # load libraries
-library(BiocManager)
-library(phyloseq)
 library(stringr)
 library(vegan)
 library(ape)
@@ -24,7 +22,6 @@ library(ggforce)
 library(ggplot2)
 library(tidyverse)
 library(RColorBrewer)
-library(pheatmap)
 library(ggpubr)
 library(microbiome)
 library(cowplot)
