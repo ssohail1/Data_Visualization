@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 feature_table = pd.read_csv('feature_count_table.csv', sep = '\t') # count table - with absolute counts
 feature_table = feature_table.transpose() # transpose so that samples are rows
