@@ -1,6 +1,6 @@
 ---
 title: "R_visualization"
-date: "2024-01-07"
+date: "updated on 05-05-2025"
 author: "Sidra Sohail"
 output:
   html_document:
@@ -36,26 +36,27 @@ library(factoextra)
 library(PERMANOVA)
 
 # load count table(with experimental samples), variant table, metadata table, and count table with all samples included(control + experimental samples)
-source("~/Downloads/WolfeLab/Urobiome.colors.R")
 counttbl <- read.table("count_table.tsv", sep = '\t',header=T) # samples are rows
 varianttbl <- read.table("variant_table.tsv", sep = '\t',header=T) # variants are rows
 sampletbl <- read.table("metadata.txt",sep = '\t', header=T, row.names=1)
 
 counttblnew <- data.frame(counttbl)
 varianttblnew <- data.frame(varianttbl)
+sampletblnew <- data.frame(sampletbl)
 
 # extract paired data
 counttblt <- data.frame(t(counttblnew))
 counttab <- as.matrix(counttblt)
-sampletblnew <- data.frame(sampletbl)
-sampletblnew <- sampletbl[(sampletbl$type == "paired"),]
-sampleskeep <- (rownames(sampletbl[(sampletbl$type == "paired"),]))
+sampletblnew <- sampletblnew[(sampletblnew$type == "paired"),]
+sampleskeep <- (rownames(sampletblnew[(sampletblnew$type == "paired"),]))
 counttabnew <- counttab[(rownames(counttab) %in% sampleskeep),]
 
+# run adonis
 set.seed(12345)
 counttabadonis <- adonis2(counttabnew~Type,data = sampletblnew,permutations = 9999)
-counttabdist <- vegdist(counttabnew,method = "euclidean")
-counttabdist[is.nan(counttabdist)] <- 0.0
+counttabdist <- vegdist(counttabnew, method = "bray")
+
+# run pcoa
 cnttab <- pcoa(counttabdist)
 eigenpercents <- (cnttab$values$Eigenvalues)/(sum(cnttab$values$Eigenvalues))*100
 cnt <- data.frame(cnttab$vectors)
@@ -66,16 +67,16 @@ symbols = c('circle','circle-open','square','square-open','diamond','diamond-ope
 pco1 <- paste("PCo1",paste(paste("( ",threeeigperc[1],sep=''),'%',sep=''),sep = ' ', " )")
 pco2 <- paste("PCo2",paste(paste("( ",threeeigperc[2],sep=''),'%',sep=''),sep = ' ', " )")
 pco3 <- paste("PCo3",paste(paste("( ",threeeigperc[3],sep=''),'%',sep=''),sep = ' ', " )")
-euclidpcoafig <- plot_ly(cnt, x = ~Axis.1, y = ~Axis.2, z = ~Axis.3, symbol = cnt[,ncol(cnt)],symbols = symbols, text = ~paste('Sample: ', rownames(cnt)))%>%
+braypcoafig <- plot_ly(cnt, x = ~Axis.1, y = ~Axis.2, z = ~Axis.3, symbol = cnt[,ncol(cnt)],symbols = symbols, text = ~paste('Sample: ', rownames(cnt)))%>%
   add_markers(type="scatter")%>%
   layout(scene = list(xaxis = list(title = pco1),
                       yaxis = list(title = pco2),
                       zaxis = list(title = pco3)),
-         title = "Title goes here with a p-value statistic" counttabadonis$Pr(>F))
+         title = " <Title goes here> " counttabadonis$Pr(>F))
 
-euclidpcoafig
-pdffile <- paste0("Euclidean_pcoa",".html")
-htmlwidgets::saveWidget((euclidpcoafig),
+braypcoafig
+pdffile <- paste0("bray-curtis_pcoa",".html")
+htmlwidgets::saveWidget((braypcoafig),
                         file = pdffile, selfcontained = FALSE)
 ```
 
